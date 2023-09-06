@@ -1,5 +1,5 @@
 import type { Provider, User } from '@supabase/supabase-js';
-import { useEffect, useState, type FC } from 'react';
+import { useEffect, type FC } from 'react';
 
 import { sendToBackground } from '@plasmohq/messaging';
 import { Storage } from '@plasmohq/storage';
@@ -23,7 +23,7 @@ const IndexOptions: FC = () => {
         console.error(error);
         return;
       }
-      if (!!data.session) {
+      if (data.session) {
         setUser(data.session.user);
         sendToBackground({
           name: 'init-session',
@@ -37,36 +37,6 @@ const IndexOptions: FC = () => {
 
     init();
   }, []);
-
-  const handleEmailLogin = async (
-    type: 'LOGIN' | 'SIGNUP',
-    username: string,
-    password: string,
-  ) => {
-    try {
-      const {
-        error,
-        data: { user },
-      } =
-        type === 'LOGIN'
-          ? await supabase.auth.signInWithPassword({
-              email: username,
-              password,
-            })
-          : await supabase.auth.signUp({ email: username, password });
-
-      if (error) {
-        alert('Error with auth: ' + error.message);
-      } else if (!user) {
-        alert('Signup successful, confirmation mail should be sent soon!');
-      } else {
-        setUser(user);
-      }
-    } catch (error) {
-      console.log('error', error);
-      alert(error.error_description || error);
-    }
-  };
 
   const handleOAuthLogin = async (provider: Provider, scopes = 'email') => {
     await supabase.auth.signInWithOAuth({
@@ -116,7 +86,7 @@ const IndexOptions: FC = () => {
         {!user && (
           <>
             <button
-              onClick={(e) => {
+              onClick={() => {
                 handleOAuthLogin('github');
               }}
             >

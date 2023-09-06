@@ -7,7 +7,14 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "package": "plasmo package"
+    "lint": "eslint . --ext .ts,.tsx",
+    "package": "plasmo package",
+    "format": "prettier --write",
+    "stylelint": "stylelint --ignore-path .gitignore './src/**/*.{jsx,tsx,css,scss}'",
+    "prepare": "husky install",
+    "fix": "pnpm lint --fix && pnpm stylelint --fix && pnpm format",
+    "prettier": "prettier --config .prettierrc.js './**/*.{js,jsx,ts,tsx,json,md}'",
+    "preinstall": "npx only-allow pnpm"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -27,7 +34,21 @@
     "@types/node": "20.5.9",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "eslint": "^8.48.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "postcss-jsx": "^0.36.4",
     "prettier": "3.0.3",
+    "stylelint": "^15.10.3",
+    "stylelint-config-idiomatic-order": "^9.0.0",
+    "stylelint-config-recess-order": "^4.3.0",
+    "stylelint-config-standard": "^34.0.0",
     "typescript": "5.2.2"
   },
   "manifest": {

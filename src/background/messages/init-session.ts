@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   supabase.auth.onAuthStateChange((event, session) => {
+    // eslint-disable-next-line no-console
     console.log(event, session);
   });
 
