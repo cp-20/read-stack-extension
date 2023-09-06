@@ -10,6 +10,13 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@mantine/core": "^6.0.19",
+    "@mantine/hooks": "^6.0.19",
+    "@plasmohq/messaging": "^0.5.0",
+    "@plasmohq/storage": "^1.7.2",
+    "@supabase/supabase-js": "^2.33.1",
+    "@tabler/icons-react": "^2.32.0",
     "plasmo": "0.82.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -27,8 +34,22 @@
     "host_permissions": [
       "https://*/*"
     ],
+    "key": "$CRX_KEY",
     "permissions": [
       "tabs"
+    ],
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "options.html"
+        ],
+        "matches": [
+          "<all_urls>"
+        ],
+        "extension_ids": [
+          "$CRX_ID"
+        ]
+      }
     ]
   }
 }

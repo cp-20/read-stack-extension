@@ -10,10 +10,12 @@
   ],
   "compilerOptions": {
     "paths": {
-      "~*": [
+      "@/*": [
         "./src/*"
       ]
     },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
   }
 }
