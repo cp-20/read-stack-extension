@@ -1,32 +1,33 @@
-import { supabase } from "@/lib/supabase"
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react';
+
+import { supabase } from '@/lib/supabase';
 
 export const useAuth = () => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   const login = async () => {
-    console.log("login")
+    console.log('login');
 
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "github",
+      provider: 'github',
       options: {
-        skipBrowserRedirect: true
-      }
-    })
+        skipBrowserRedirect: true,
+      },
+    });
 
     if (error) {
-      console.log(error)
-      return
+      console.log(error);
+      return;
     }
 
-    window.open(data.url)
-  }
+    window.open(data.url);
+  };
 
-  const logout = () => {}
+  const logout = () => {};
 
   return {
     user,
     login,
-    logout
-  }
-}
+    logout,
+  };
+};

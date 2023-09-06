@@ -1,6 +1,7 @@
-import { Layout } from "@/layout"
-import { Popup } from "@/pages/popup"
-import type { FC } from "react"
+import type { FC } from 'react';
+
+import { Layout } from '@/layout';
+import { Popup } from '@/pages/popup';
 
 const IndexPopup: FC = () => {
   return (
@@ -9,7 +10,7 @@ const IndexPopup: FC = () => {
         <Popup />
       </Layout>
     </>
-  )
-}
+  );
+};
 
-export default IndexPopup
+export default IndexPopup;

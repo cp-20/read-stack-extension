@@ -1,12 +1,13 @@
-import { useAuth } from "@/lib/auth"
-import { css } from "@emotion/react"
-import { Button, useMantineTheme } from "@mantine/core"
-import { IconBrandGithubFilled } from "@tabler/icons-react"
-import brandIcon from "data-base64:assets/icon.svg"
-import type { FC } from "react"
+import { css } from '@emotion/react';
+import { Button, useMantineTheme } from '@mantine/core';
+import { IconBrandGithubFilled } from '@tabler/icons-react';
+import brandIcon from 'data-base64:assets/icon.svg';
+import type { FC } from 'react';
+
+import { useAuth } from '@/lib/auth';
 
 export const Popup: FC = () => {
-  const { user, login } = useAuth()
+  const { user, login } = useAuth();
 
   return (
     <>
@@ -18,7 +19,8 @@ export const Popup: FC = () => {
           min-height: 100vh;
           flex-direction: column;
           gap: 32px;
-        `}>
+        `}
+      >
         <div
           css={css`
             display: flex;
@@ -26,7 +28,8 @@ export const Popup: FC = () => {
             align-items: center;
             justify-content: center;
             gap: 32px;
-          `}>
+          `}
+        >
           <div>
             <img src={brandIcon} alt="" width={96} height={96} />
           </div>
@@ -34,16 +37,18 @@ export const Popup: FC = () => {
             <h1
               css={css`
                 font-size: 2rem;
-                font-family: "Raleway", sans-serif;
+                font-family: 'Raleway', sans-serif;
                 margin: 0;
-              `}>
+              `}
+            >
               ReadStack
             </h1>
             <p
               css={css`
                 font-size: 1rem;
                 margin: 0;
-              `}>
+              `}
+            >
               技術記事の未読消化をサポート
             </p>
           </div>
@@ -52,11 +57,12 @@ export const Popup: FC = () => {
           <Button
             color="dark"
             leftIcon={<IconBrandGithubFilled color="white" />}
-            onClick={login}>
+            onClick={login}
+          >
             GitHubでログイン
           </Button>
         )}
       </div>
     </>
-  )
-}
+  );
+};

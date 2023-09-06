@@ -1,6 +1,6 @@
-import { css } from "@emotion/react"
-import { MantineProvider } from "@mantine/core"
-import type { FC, ReactNode } from "react"
+import { css } from '@emotion/react';
+import { MantineProvider } from '@mantine/core';
+import type { FC, ReactNode } from 'react';
 
 export const Layout: FC<{ children?: ReactNode }> = ({ children }) => (
   <>
@@ -14,10 +14,11 @@ export const Layout: FC<{ children?: ReactNode }> = ({ children }) => (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <div
         css={css`
-          font-family: "Noto Sans JP", sans-serif;
-        `}>
+          font-family: 'Noto Sans JP', sans-serif;
+        `}
+      >
         {children}
       </div>
     </MantineProvider>
   </>
-)
+);

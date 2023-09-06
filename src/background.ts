@@ -1,2 +1,2 @@
-export {}
-console.log("HELLO WORLD FROM BGSCRIPTS")
+export {};
+console.log('HELLO WORLD FROM BGSCRIPTS');

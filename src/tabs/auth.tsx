@@ -1,7 +1,7 @@
-import type { FC } from "react"
+import type { FC } from 'react';
 
 const AuthPage: FC = () => {
-  return <div>Auth</div>
-}
+  return <div>Auth</div>;
+};
 
-export default AuthPage
+export default AuthPage;
