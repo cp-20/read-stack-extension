@@ -4,7 +4,7 @@ import { IconExternalLink } from '@tabler/icons-react';
 import brandIcon from 'data-base64:assets/icon.svg';
 import type { FC } from 'react';
 
-import { useUserInfo } from '@/lib/useUserInfo';
+import { useUserInfo } from '@/lib/core/useUserInfo';
 
 export const Popup: FC = () => {
   const { userInfo, isLoading } = useUserInfo();

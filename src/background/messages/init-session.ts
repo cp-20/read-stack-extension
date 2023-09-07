@@ -1,6 +1,6 @@
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/boundaries/supabase';
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   supabase.auth.onAuthStateChange((event, session) => {

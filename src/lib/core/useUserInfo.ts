@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
-import { apiBaseUrl } from '@/lib/const';
-import { fetcher } from '@/lib/fetcher';
+import { fetcher } from '@/lib/swr/fetcher';
+import { apiBaseUrl } from '@/lib/util/const';
 
 type UserInfo = {
   id: string;
