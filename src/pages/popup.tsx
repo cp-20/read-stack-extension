@@ -1,10 +1,14 @@
 import { css } from '@emotion/react';
-import { Button } from '@mantine/core';
-import { IconBrandGithubFilled } from '@tabler/icons-react';
+import { Button, Text } from '@mantine/core';
+import { IconExternalLink } from '@tabler/icons-react';
 import brandIcon from 'data-base64:assets/icon.svg';
 import type { FC } from 'react';
 
+import { useUserInfo } from '@/lib/useUserInfo';
+
 export const Popup: FC = () => {
+  const { userInfo, isLoading } = useUserInfo();
+
   return (
     <>
       <div
@@ -49,9 +53,28 @@ export const Popup: FC = () => {
             </p>
           </div>
         </div>
-        <Button color="dark" leftIcon={<IconBrandGithubFilled color="white" />}>
-          GitHubでログイン
-        </Button>
+        {isLoading && <div>読み込み中...</div>}
+        {!isLoading && userInfo && (
+          <Text>
+            <Text component="span" fw="bold">
+              {userInfo.displayName}
+            </Text>
+            としてログインしています
+          </Text>
+        )}
+        {!isLoading && !userInfo && (
+          <>
+            <Button
+              leftIcon={<IconExternalLink size="0.9rem" />}
+              onClick={() =>
+                window.open(`${process.env.PLASMO_PUBLIC_APP_URL}/login`)
+              }
+            >
+              認証する
+            </Button>
+            <Text size="xs">ReadStackのサイトに移動します</Text>
+          </>
+        )}
       </div>
     </>
   );

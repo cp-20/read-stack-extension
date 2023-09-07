@@ -26,7 +26,8 @@
     "@tabler/icons-react": "^2.32.0",
     "plasmo": "0.82.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "swr": "^2.2.2"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.0",
@@ -53,7 +54,7 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "https://read-stack.vercel.app/api/*"
     ],
     "key": "$CRX_KEY",
     "permissions": [
