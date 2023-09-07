@@ -1,11 +1,6 @@
 const path = require('path');
 const { ESLint } = require('eslint');
 
-const buildEslintCommand = (filenames) =>
-  `next lint --fix --file ${filenames
-    .map((f) => path.relative(process.cwd(), f))
-    .join(' --file ')}`;
-
 const removeIgnoredFiles = async (files) => {
   const eslint = new ESLint();
   const isIgnored = await Promise.all(
@@ -23,7 +18,10 @@ const buildCommand = (command) => async (filenames) => {
 };
 
 module.exports = {
-  '*.{js,jsx,ts,tsx}': [buildEslintCommand, buildCommand('pnpm stylelint')],
+  '*.{js,jsx,ts,tsx}': [
+    buildCommand('pnpm lint'),
+    buildCommand('pnpm stylelint'),
+  ],
   '*.{js,jsx,ts,tsx,css,scss}': buildCommand('pnpm stylelint'),
   '*.{css,scss,js,jsx,ts,tsx,json,md}': buildCommand('pnpm format'),
 };
