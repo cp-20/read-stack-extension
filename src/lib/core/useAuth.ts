@@ -5,7 +5,7 @@ import { sendToBackground } from '@plasmohq/messaging';
 import { Storage } from '@plasmohq/storage';
 import { useStorage } from '@plasmohq/storage/hook';
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/boundaries/supabase';
 
 export const useAuth = () => {
   const [user, setUser] = useStorage<User>({
