@@ -1,17 +1,18 @@
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import { postArticle, type Article } from '@/lib/repository/postArticle';
-import { postClip, type Clip } from '@/lib/repository/postClip';
+import { getUser } from '@/background/messages/get-user';
+import type { Article, Clip } from '@/lib/repository/postClipWithArticle';
+import { postClip } from '@/lib/repository/postClipWithArticle';
 
 const handler: PlasmoMessaging.MessageHandler<
-  { userId: string; url: string },
+  { url: string },
   { article: Article; clip: Clip }
 > = async (req, res) => {
-  const { userId, url } = req.body;
+  const { url } = req.body;
 
   try {
-    const article = await postArticle(url);
-    const clip = await postClip(userId, article.id);
+    const user = await getUser();
+    const { article, clip } = await postClip(user.id, url);
 
     res.send({ article, clip });
   } catch (err) {

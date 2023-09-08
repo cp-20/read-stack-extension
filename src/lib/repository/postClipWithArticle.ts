@@ -11,10 +11,23 @@ export type Clip = {
   updatedAt: string;
 };
 
-export const postClip = async (userId: string, articleId: number) => {
+export type Article = {
+  id: number;
+  url: string;
+  title: string;
+  body: string;
+  ogImageUrl: string | null;
+  summary: string | null;
+  createdAt: string;
+};
+
+export const postClip = async (userId: string, articleUrl: string) => {
   const res = await fetch(`${apiBaseUrl}/users/${userId}/clips`, {
     method: 'POST',
-    body: JSON.stringify({ articleId }),
+    body: JSON.stringify({
+      type: 'url',
+      articleUrl,
+    }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -22,7 +35,7 @@ export const postClip = async (userId: string, articleId: number) => {
   if (!res.ok) {
     throw new Error('Failed to post clip');
   }
-  const data = (await res.json()) as Clip;
+  const data = (await res.json()) as { article: Article; clip: Clip };
 
   return data;
 };
