@@ -18,6 +18,7 @@ export const config: PlasmoCSConfig = {
     'https://zenn.dev/*/articles/*',
     'https://note.com/*/n/*',
   ],
+  run_at: 'document_start',
 };
 
 const selector = getSelector(location.href);
