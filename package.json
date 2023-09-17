@@ -14,7 +14,15 @@
     "prepare": "husky install",
     "fix": "pnpm lint --fix && pnpm stylelint --fix && pnpm format",
     "prettier": "prettier --config .prettierrc.js './**/*.{js,jsx,ts,tsx,json,md}'",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "compose:brave": "pnpm build --target=brave-mv3 && pnpm package --target=brave-mv3",
+    "compose:chrome": "pnpm build --target=chrome-mv3 && pnpm package --target=chrome-mv3",
+    "compose:edge": "pnpm build --target=edge-mv3 && pnpm package --target=edge-mv3",
+    "compose:firefox2": "pnpm build --target=firefox-mv2 && pnpm package --target=firefox-mv2",
+    "compose:firefox3": "pnpm build --target=firefox-mv3 && pnpm package --target=firefox-mv3",
+    "compose:opera": "pnpm build --target=opera-mv3 && pnpm package --target=opera-mv3",
+    "compose:safari": "pnpm build --target=safari-mv3 && pnpm package --target=safari-mv3",
+    "compose:all": "pnpm compose:brave && pnpm compose:chrome && pnpm compose:edge && pnpm compose:firefox2 && pnpm compose:firefox3 && pnpm compose:opera && pnpm compose:safari"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
