@@ -46,7 +46,7 @@ const setup = async () => {
 
 const setupPromise = setup();
 
-window.addEventListener('load', () => {
+const onload = () => {
   setupPromise.then(({ user, clip }) => {
     let timeout: NodeJS.Timeout;
     window.addEventListener(
@@ -74,4 +74,12 @@ window.addEventListener('load', () => {
       { passive: true },
     );
   });
-});
+};
+
+window.addEventListener('load', onload);
+
+const pushState = window.history.pushState;
+window.history.pushState = (state, unused, url) => {
+  onload();
+  pushState(state, unused, url);
+};
