@@ -38,6 +38,14 @@ jobs:
         run: |
           sudo chown -R runner:docker build/
 
+      - name: test
+        run: |
+          ls -la build/
+
+      - name: test
+        run: |
+          whoami
+
       - name: Create Release
         run: |
           sudo gh release create ${{ github.ref }} \
