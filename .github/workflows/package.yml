@@ -39,10 +39,10 @@ jobs:
           VERSION=${{ github.ref }}
           gh release create ${{ github.ref }} \
           --generate-notes
-          build/brave-mv3.zip \
-          build/chrome-mv3.zip \
-          build/edge-mv3.zip \
-          build/firefox-mv2.zip
-          build/firefox-mv3.zip \
-          build/opera-mv3.zip \
-          build/safari-mv3.zip \
+          build/brave-mv3-prod.zip \
+          build/chrome-mv3-prod.zip \
+          build/edge-mv3-prod.zip \
+          build/firefox-mv2-prod.zip
+          build/firefox-mv3-prod.zip \
+          build/opera-mv3-prod.zip \
+          build/safari-mv3-prod.zip \
