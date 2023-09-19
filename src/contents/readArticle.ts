@@ -8,23 +8,3 @@ export const config: PlasmoCSConfig = {
 };
 
 main();
-
-console.log('contents_script');
-
-const pushState = window.history.pushState;
-window.history.pushState = (state, unused, url) => {
-  window.console.log('pushState', state, unused, url);
-
-  pushState(state, unused, url);
-  window.cleanupScrollHandler?.();
-};
-
-declare global {
-  interface Window {
-    mainMessage?: string;
-  }
-}
-
-window.mainMessage = 'hello from contents_script';
-
-fetch('https://qiita.com/api/v2/items/1e8e8d9e484b7f2a3b5e');
