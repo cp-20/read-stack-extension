@@ -1,6 +1,6 @@
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import { getUser } from '@/background/messages/get-user';
+import { getUserId } from '@/background/messages/get-user-id';
 import type { Article, Clip } from '@/lib/repository/postClipWithArticle';
 import { postClip } from '@/lib/repository/postClipWithArticle';
 
@@ -11,8 +11,8 @@ const handler: PlasmoMessaging.MessageHandler<
   const { url } = req.body;
 
   try {
-    const user = await getUser();
-    const { article, clip } = await postClip(user.id, url);
+    const userId = await getUserId();
+    const { article, clip } = await postClip(userId, url);
 
     res.send({ article, clip });
   } catch (err) {
