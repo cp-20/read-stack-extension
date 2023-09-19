@@ -38,11 +38,11 @@ jobs:
         run: |
           VERSION=${{ github.ref }}
           gh release create ${{ github.ref }} \
-          --title "🚀 $VERSION" \
-          --attach build/brave-mv3.zip \
-          --attach build/chrome-mv3.zip \
-          --attach build/edge-mv3.zip \
-          --attach build/firefox-mv2.zip
-          --attach build/firefox-mv3.zip \
-          --attach build/opera-mv3.zip \
-          --attach build/safari-mv3.zip \
+          --generate-notes
+          build/brave-mv3.zip \
+          build/chrome-mv3.zip \
+          build/edge-mv3.zip \
+          build/firefox-mv2.zip
+          build/firefox-mv3.zip \
+          build/opera-mv3.zip \
+          build/safari-mv3.zip \
