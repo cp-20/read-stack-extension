@@ -1,7 +1,7 @@
 name: 'Packaging extension'
 
 on:
-  create:
+  push:
     tags:
       - 'v*'
 
@@ -21,6 +21,7 @@ jobs:
         with:
           version: latest
           run_install: true
+
       - name: Use Node.js 20.x
         uses: actions/setup-node@v3.4.1
         with:
@@ -28,13 +29,11 @@ jobs:
           cache: 'pnpm'
       - name: Build and package extension for all browsers
         run: pnpm compose:all
+
+      - name: Setup GitHub CLI
+        run: |
+          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Create Release
-        id: create_release
-        uses: gh-actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+        run: |
+          gh release create ${{ github.ref }}
