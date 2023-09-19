@@ -11,7 +11,11 @@ export const Layout: FC<{ children?: ReactNode }> = ({ children }) => (
       rel="stylesheet"
     />
 
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{ primaryColor: 'cyan' }}
+    >
       <div
         css={css`
           font-family: 'Noto Sans JP', sans-serif;

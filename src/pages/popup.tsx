@@ -1,12 +1,14 @@
 import { css } from '@emotion/react';
-import { Button, Text } from '@mantine/core';
-import { IconExternalLink } from '@tabler/icons-react';
-import brandIcon from 'data-base64:assets/icon.svg';
+import { Button, Flex, Loader, Text } from '@mantine/core';
+import { IconCheck, IconExternalLink, IconX } from '@tabler/icons-react';
 import type { FC } from 'react';
 
+import { Banner } from '@/components/Banner';
+import { useAuth } from '@/lib/core/useAuth';
 import { useUserInfo } from '@/lib/core/useUserInfo';
 
 export const Popup: FC = () => {
+  const { user } = useAuth();
   const { userInfo, isLoading } = useUserInfo();
 
   return (
@@ -23,58 +25,77 @@ export const Popup: FC = () => {
       >
         <div
           css={css`
-            display: flex;
             flex: 1;
-            gap: 32px;
-            align-items: center;
-            justify-content: center;
           `}
         >
-          <div>
-            <img src={brandIcon} alt="" width={96} height={96} />
-          </div>
-          <div>
-            <h1
-              css={css`
-                margin: 0;
-                font-family: Raleway, sans-serif;
-                font-size: 2rem;
-              `}
-            >
-              ReadStack
-            </h1>
-            <p
-              css={css`
-                margin: 0;
-                font-size: 1rem;
-              `}
-            >
-              技術記事の未読消化をサポート
-            </p>
-          </div>
+          <Banner />
         </div>
-        {isLoading && <div>読み込み中...</div>}
-        {!isLoading && userInfo && (
-          <Text>
-            <Text component="span" fw="bold">
-              {userInfo.displayName}
+        <div>
+          <Flex gap="0.25rem" align="center">
+            <Text fw="bold">拡張機能のログイン状態</Text>
+            {user ? <IconCheck color="green" /> : <IconX color="red" />}
+            {!user && (
+              <Button
+                ml="lg"
+                variant="light"
+                size="xs"
+                leftIcon={<IconExternalLink size="0.9rem" />}
+                onClick={() => {
+                  window.open(
+                    `chrome-extension://${process.env.PLASMO_PUBLIC_CRX_ID}/options.html`,
+                  );
+                }}
+              >
+                認証する
+              </Button>
+            )}
+          </Flex>
+          {user && (
+            <Text color="dimmed" size="sm">
+              <Text component="span" fw="bold">
+                {user.email}
+              </Text>
+              としてログインしています
             </Text>
-            としてログインしています
-          </Text>
-        )}
-        {!isLoading && !userInfo && (
-          <>
-            <Button
-              leftIcon={<IconExternalLink size="0.9rem" />}
-              onClick={() =>
-                window.open(`${process.env.PLASMO_PUBLIC_APP_URL}/login`)
-              }
-            >
-              認証する
-            </Button>
-            <Text size="xs">ReadStackのサイトに移動します</Text>
-          </>
-        )}
+          )}
+        </div>
+
+        <div>
+          <Flex gap="0.25rem" align="center">
+            <Text fw="bold">アプリのログイン状態</Text>
+            {!isLoading ? (
+              userInfo ? (
+                <IconCheck color="green" />
+              ) : (
+                <IconX color="red" />
+              )
+            ) : (
+              <Loader size="xs" />
+            )}
+            {!isLoading && !userInfo && (
+              <Button
+                ml="lg"
+                variant="light"
+                size="xs"
+                leftIcon={<IconExternalLink size="0.9rem" />}
+                onClick={() =>
+                  window.open(`${process.env.PLASMO_PUBLIC_APP_URL}/login`)
+                }
+              >
+                認証する
+              </Button>
+            )}
+          </Flex>
+
+          {!isLoading && userInfo && (
+            <Text color="dimmed" size="sm">
+              <Text component="span" fw="bold">
+                {userInfo.displayName}
+              </Text>
+              としてログインしています
+            </Text>
+          )}
+        </div>
       </div>
     </>
   );
