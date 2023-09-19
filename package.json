@@ -66,7 +66,7 @@
     ],
     "key": "$CRX_KEY",
     "permissions": [
-      "tabs"
+      "activeTab"
     ],
     "web_accessible_resources": [
       {
