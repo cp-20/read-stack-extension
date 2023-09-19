@@ -30,10 +30,6 @@ jobs:
       - name: Build and package extension for all browsers
         run: pnpm compose:all
 
-      - name: Setup GitHub CLI
-        run: |
-          gh auth login --with-token <<< "${{ secrets.GRAINED_GITHUB_TOKEN }}"
-
       - name: Change owner of build directory
         run: |
           sudo chown -R runner:docker build/
@@ -49,3 +45,5 @@ jobs:
           build/firefox-mv3-prod.zip \
           build/opera-mv3-prod.zip \
           build/safari-mv3-prod.zip \
+        env:
+          GITHUB_TOKEN: ${{ secrets.GRAINED_GITHUB_TOKEN }}
