@@ -34,6 +34,10 @@ jobs:
         run: |
           gh auth login --with-token <<< "${{ secrets.GRAINED_GITHUB_TOKEN }}"
 
+      - name: Change owner of build directory
+        run: |
+          sudo chown -R runner:docker build/
+
       - name: Create Release
         run: |
           sudo gh release create ${{ github.ref }} \
