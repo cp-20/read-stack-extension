@@ -1,3 +1,4 @@
+import type { AuthUser } from '@supabase/supabase-js';
 import type { PlasmoCSConfig } from 'plasmo';
 
 import { sendToBackground } from '@plasmohq/messaging';
@@ -23,8 +24,8 @@ export const config: PlasmoCSConfig = {
 const selector = getSelector(location.href);
 
 const setup = async () => {
-  const { userId } = await sendToBackground<void, { userId: string | null }>({
-    name: 'get-user-id',
+  const { user } = await sendToBackground<void, { user: AuthUser }>({
+    name: 'get-user',
   });
 
   const { clip } = await sendToBackground<
@@ -40,15 +41,13 @@ const setup = async () => {
     window.scrollTo(0, progress2scroll(selector)(clip.progress));
   }
 
-  return { userId, clip };
+  return { user, clip };
 };
 
 const setupPromise = setup();
 
 const onload = () => {
-  setupPromise.then(({ userId, clip }) => {
-    if (userId === null) return;
-
+  setupPromise.then(({ user, clip }) => {
     let timeout: NodeJS.Timeout;
     window.addEventListener(
       'scroll',
@@ -65,7 +64,7 @@ const onload = () => {
           >({
             name: 'update-clip',
             body: {
-              userId,
+              userId: user.id,
               clipId: clip.id,
               patch: { status, progress },
             },

@@ -1,4 +1,4 @@
-import type { Clip } from '@/lib/repository/postClipWithArticle';
+import type { Clip } from '@/lib/repository/postClip';
 import { apiBaseUrl } from '@/lib/util/const';
 
 export type PatchClipData = {

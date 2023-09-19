@@ -1,6 +1,6 @@
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import type { Clip } from '@/lib/repository/postClipWithArticle';
+import type { Clip } from '@/lib/repository/postClip';
 import { updateClip, type PatchClipData } from '@/lib/repository/updateClip';
 
 const handler: PlasmoMessaging.MessageHandler<
