@@ -62,11 +62,14 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://read-stack.vercel.app/api/*"
+      "https://read-stack.vercel.app/api/*",
+      "https://qiita.com/*",
+      "https://zenn.dev/*",
+      "https://note.com/*"
     ],
     "key": "$CRX_KEY",
     "permissions": [
-      "tabs"
+      "activeTab"
     ],
     "web_accessible_resources": [
       {
