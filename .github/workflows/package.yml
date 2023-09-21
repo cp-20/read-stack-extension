@@ -41,7 +41,7 @@ jobs:
           build/brave-mv3-prod.zip \
           build/chrome-mv3-prod.zip \
           build/edge-mv3-prod.zip \
-          build/firefox-mv2-prod.zip
+          build/firefox-mv2-prod.zip \
           build/firefox-mv3-prod.zip \
           build/opera-mv3-prod.zip \
           build/safari-mv3-prod.zip
