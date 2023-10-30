@@ -1,15 +1,16 @@
 import useSWR from 'swr';
 
 import type { UserInfo } from '@/lib/repository/getUserInfo';
-import { fetcher } from '@/lib/swr/fetcher';
 import { apiBaseUrl } from '@/lib/util/const';
 
 export const useUserInfo = () => {
-  const { data, error } = useSWR<UserInfo>(`${apiBaseUrl}/users/me`, fetcher);
+  const { data, isLoading } = useSWR<UserInfo>(
+    `${apiBaseUrl}/users/me`,
+    (url: string) => fetch(url).then((r) => (r.ok ? r.json() : null)),
+  );
 
   return {
     userInfo: data,
-    isLoading: !error && !data,
-    isError: error,
+    isLoading,
   };
 };
