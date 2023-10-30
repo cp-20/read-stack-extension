@@ -4,6 +4,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 import type { FC } from 'react';
 
 import { Banner } from '@/components/Banner';
+import { ImportFromBookmarks } from '@/components/ImportFromBookmarks';
 import { Layout } from '@/layout';
 import { useAuth } from '@/lib/core/useAuth';
 
@@ -48,6 +49,10 @@ export const Options: FC = () => {
             )}
           </div>
         </Flex>
+
+        <Space h="xl" />
+
+        <ImportFromBookmarks />
       </div>
     </Layout>
   );
