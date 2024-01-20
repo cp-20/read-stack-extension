@@ -1,15 +1,13 @@
 import { css } from '@emotion/react';
-import { Button, Flex, Space, Text } from '@mantine/core';
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { Space } from '@mantine/core';
 import type { FC } from 'react';
 
 import { Banner } from '@/components/Banner';
 import { ImportFromBookmarks } from '@/components/ImportFromBookmarks';
+import { Settings } from '@/components/Settings';
 import { Layout } from '@/layout';
-import { useAuth } from '@/lib/core/useAuth';
 
 export const Options: FC = () => {
-  const { user, handleOAuthLogin, handleLogout } = useAuth();
   return (
     <Layout>
       <div
@@ -22,36 +20,9 @@ export const Options: FC = () => {
         `}
       >
         <Banner />
-
         <Space h="xl" />
-
-        <Flex gap="0.25rem" align="center">
-          <Text fw="bold">拡張機能のログイン状態</Text>
-          {user ? <IconCheck color="green" /> : <IconX color="red" />}
-
-          <div
-            css={css`
-              margin-left: 1rem;
-            `}
-          >
-            {user ? (
-              <Button variant="light" size="sm" onClick={handleLogout}>
-                ログアウト
-              </Button>
-            ) : (
-              <Button
-                variant="light"
-                size="sm"
-                onClick={() => handleOAuthLogin('github')}
-              >
-                ログイン
-              </Button>
-            )}
-          </div>
-        </Flex>
-
+        <Settings />
         <Space h="xl" />
-
         <ImportFromBookmarks />
       </div>
     </Layout>
