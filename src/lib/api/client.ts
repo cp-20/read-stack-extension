@@ -14,6 +14,10 @@ fetcher.configure({
 });
 
 export const getMe = fetcher.path('/users/me').method('get').create();
+export const getMyClips = fetcher
+  .path('/users/me/clips')
+  .method('get')
+  .create();
 export const postMyClip = fetcher
   .path('/users/me/clips')
   .method('post')
@@ -21,6 +25,22 @@ export const postMyClip = fetcher
 export const patchMyClip = fetcher
   .path('/users/me/clips/{clipId}')
   .method('patch')
+  .create();
+export const deleteMyClip = fetcher
+  .path('/users/me/clips/{clipId}')
+  .method('delete')
+  .create();
+export const getMyInboxItems = fetcher
+  .path('/users/me/inboxes')
+  .method('get')
+  .create();
+export const postMyInboxItem = fetcher
+  .path('/users/me/inboxes')
+  .method('post')
+  .create();
+export const moveMyInboxItemToClip = fetcher
+  .path('/users/me/inboxes/{itemId}/move-to-clip')
+  .method('post')
   .create();
 
 export type User = components['schemas']['User'];

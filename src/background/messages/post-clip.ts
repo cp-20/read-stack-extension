@@ -1,15 +1,15 @@
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import { postMyClip, type Clip } from '@/lib/api/client';
+import { postMyClip, type ClipWithArticle } from '@/lib/api/client';
 
-type SuccessResponse = { success: true; clip: Clip };
-type ErrorResponse = { success: false };
+export type PostClipSuccessResponse = { success: true; clip: ClipWithArticle };
+export type PostClipErrorResponse = { success: false };
 
-type Response = SuccessResponse | ErrorResponse;
+export type PostClipResponse = PostClipSuccessResponse | PostClipErrorResponse;
 
 const handler: PlasmoMessaging.MessageHandler<
   { url: string },
-  Response
+  PostClipResponse
 > = async (req, res) => {
   if (req.body === undefined) {
     res.send({ success: false });

@@ -244,6 +244,8 @@ export interface operations {
         readStatus?: "all" | "read" | "unread";
         /** @description クリップの検索クエリ */
         text?: string;
+        /** @description クリップのURL */
+        url?: string;
         /** @description 取得するクリップの数 */
         limit?: string;
         /** @description 取得するクリップのオフセット */
@@ -621,6 +623,10 @@ export interface operations {
   getMyInboxItems: {
     parameters: {
       query?: {
+        /** @description 記事のURL */
+        url?: string;
+        /** @description 記事の検索クエリ */
+        text?: string;
         /** @description 取得するアイテムの数 */
         limit?: string;
         /** @description 取得するアイテムのオフセット */
@@ -684,7 +690,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            item: components["schemas"]["InboxItem"];
+            item: components["schemas"]["InboxItemWithArticle"];
           };
         };
       };
