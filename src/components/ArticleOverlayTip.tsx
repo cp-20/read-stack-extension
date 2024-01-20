@@ -111,7 +111,7 @@ export const ArticleOverlayTip = () => {
       if (!updatedClip) return;
 
       setCurrentClip({ ...clip, article: currentItem.article, ...updatedClip });
-      showConfetti();
+      if (isConfettiEnabled) showConfetti();
 
       return;
     }
