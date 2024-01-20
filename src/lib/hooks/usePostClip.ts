@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { sendToBackground } from '@plasmohq/messaging';
 
-import type { PostClipResponse } from '@/background/messages/post-clip';
+import type { ClipWithArticle } from '@/lib/api/client';
 
 export const usePostClip = () => {
   const postClip = useCallback(async () => {
@@ -12,14 +12,14 @@ export const usePostClip = () => {
         currentWindow: true,
       });
       const url = activeTabs[0].url;
-      const res = await sendToBackground({
+      const clip: ClipWithArticle | null = await sendToBackground({
         name: 'post-clip',
         body: { url },
       });
 
-      return res as PostClipResponse;
+      return clip;
     } catch (error) {
-      return { success: false } as const;
+      return null;
     }
   }, []);
 

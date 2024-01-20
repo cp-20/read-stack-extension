@@ -29,13 +29,15 @@ export const Popup: FC = () => {
   useEffect(() => {
     setError(false);
     setLoading(true);
-    postClip().then((res) => {
+    postClip().then((clip) => {
       setLoading(false);
-      if (res.success) {
-        setClip(res.clip);
-      } else {
+
+      if (clip === null) {
         setError(true);
+        return;
       }
+
+      setClip(clip);
     });
   }, [setError, setLoading, setClip, postClip]);
 
