@@ -1,23 +1,33 @@
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import { getUser } from '@/background/messages/get-user';
-import type { Article, Clip } from '@/lib/repository/postClipWithArticle';
-import { postClip } from '@/lib/repository/postClipWithArticle';
+import { postMyClip, type Clip } from '@/lib/api/client';
+
+type SuccessResponse = { success: true; clip: Clip };
+type ErrorResponse = { success: false };
+
+type Response = SuccessResponse | ErrorResponse;
 
 const handler: PlasmoMessaging.MessageHandler<
   { url: string },
-  { article: Article; clip: Clip }
+  Response
 > = async (req, res) => {
+  if (req.body === undefined) {
+    res.send({ success: false });
+    return;
+  }
+
   const { url } = req.body;
 
-  try {
-    const user = await getUser();
-    const { article, clip } = await postClip(user.id, url);
-
-    res.send({ article, clip });
-  } catch (err) {
-    console.error(err);
+  const result = await postMyClip({
+    type: 'url',
+    articleUrl: url,
+  });
+  if (!result.ok) {
+    res.send({ success: false });
+    return;
   }
+
+  res.send({ success: true, clip: result.data.clip });
 };
 
 export default handler;

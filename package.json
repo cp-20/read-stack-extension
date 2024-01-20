@@ -15,6 +15,7 @@
     "fix": "pnpm lint --fix && pnpm stylelint --fix && pnpm format",
     "prettier": "prettier --config .prettierrc.js './**/*.{js,jsx,ts,tsx,json,md}'",
     "preinstall": "npx only-allow pnpm",
+    "openapi": "openapi-typescript https://read-stack.cp20.dev/api/v1/openapi -o ./src/lib/api/schema.ts",
     "compose:brave": "pnpm build --target=brave-mv3 && pnpm package --target=brave-mv3",
     "compose:chrome": "pnpm build --target=chrome-mv3 && pnpm package --target=chrome-mv3",
     "compose:edge": "pnpm build --target=edge-mv3 && pnpm package --target=edge-mv3",
@@ -33,6 +34,7 @@
     "@supabase/supabase-js": "^2.33.1",
     "@tabler/icons-react": "^2.32.0",
     "jotai": "^2.5.0",
+    "openapi-typescript-fetch": "^1.1.3",
     "plasmo": "0.83.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -53,6 +55,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
+    "openapi-typescript": "^6.7.4",
     "postcss-jsx": "^0.36.4",
     "prettier": "3.0.3",
     "stylelint": "^15.10.3",
@@ -63,7 +66,7 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://read-stack.vercel.app/api/*",
+      "https://read-stack.cp20.dev/api/*",
       "https://qiita.com/*",
       "https://zenn.dev/*",
       "https://note.com/*"
