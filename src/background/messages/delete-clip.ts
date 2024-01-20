@@ -1,15 +1,9 @@
 import type { PlasmoMessaging } from '@plasmohq/messaging';
 
-import { patchMyClip, type Clip } from '@/lib/api/client';
-
-export type ClipPatch = Partial<{
-  comment: string;
-  status: 0 | 1 | 2;
-  progress: number;
-}>;
+import { deleteMyClip, type Clip } from '@/lib/api/client';
 
 const handler: PlasmoMessaging.MessageHandler<
-  { clipId: number; patch: ClipPatch },
+  { clipId: number },
   Clip | null
 > = async (req, res) => {
   if (req.body === undefined) {
@@ -17,9 +11,9 @@ const handler: PlasmoMessaging.MessageHandler<
     return;
   }
 
-  const { clipId, patch } = req.body;
+  const { clipId } = req.body;
 
-  const result = await patchMyClip({ clip: patch, clipId: clipId.toString() });
+  const result = await deleteMyClip({ clipId: clipId.toString() });
 
   if (result.ok) {
     res.send(result.data.clip);

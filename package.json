@@ -15,6 +15,7 @@
     "fix": "pnpm lint --fix && pnpm stylelint --fix && pnpm format",
     "prettier": "prettier --config .prettierrc.js './**/*.{js,jsx,ts,tsx,json,md}'",
     "preinstall": "npx only-allow pnpm",
+    "openapi": "openapi-typescript https://read-stack.cp20.dev/api/v1/openapi -o ./src/lib/api/schema.ts",
     "compose:brave": "pnpm build --target=brave-mv3 && pnpm package --target=brave-mv3",
     "compose:chrome": "pnpm build --target=chrome-mv3 && pnpm package --target=chrome-mv3",
     "compose:edge": "pnpm build --target=edge-mv3 && pnpm package --target=edge-mv3",
@@ -25,6 +26,7 @@
     "compose:all": "pnpm compose:brave && pnpm compose:chrome && pnpm compose:edge && pnpm compose:firefox2 && pnpm compose:firefox3 && pnpm compose:opera && pnpm compose:safari"
   },
   "dependencies": {
+    "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@mantine/core": "^6.0.19",
     "@mantine/hooks": "^6.0.19",
@@ -32,15 +34,22 @@
     "@plasmohq/storage": "^1.7.2",
     "@supabase/supabase-js": "^2.33.1",
     "@tabler/icons-react": "^2.32.0",
+    "canvas-confetti": "^1.9.2",
+    "jotai": "^2.5.0",
+    "openapi-typescript-fetch": "^1.1.3",
+    "picomatch": "^3.0.1",
     "plasmo": "0.83.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-toastify": "^10.0.3",
     "swr": "^2.2.2"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.0",
+    "@types/canvas-confetti": "^1.6.4",
     "@types/chrome": "0.0.245",
     "@types/node": "20.5.9",
+    "@types/picomatch": "^2.3.3",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
@@ -52,6 +61,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.0",
     "lint-staged": "^14.0.1",
+    "openapi-typescript": "^6.7.4",
     "postcss-jsx": "^0.36.4",
     "prettier": "3.0.3",
     "stylelint": "^15.10.3",
@@ -60,21 +70,26 @@
     "stylelint-config-standard": "^34.0.0",
     "typescript": "5.2.2"
   },
+  "pnpm": {
+    "overrides": {
+      "stylelint>postcss": "8.4.33"
+    }
+  },
   "manifest": {
     "host_permissions": [
-      "https://read-stack.vercel.app/api/*",
-      "https://qiita.com/*",
-      "https://zenn.dev/*",
-      "https://note.com/*"
+      "<all_urls>"
     ],
     "key": "$CRX_KEY",
     "permissions": [
-      "activeTab"
+      "activeTab",
+      "bookmarks",
+      "notifications"
     ],
     "web_accessible_resources": [
       {
         "resources": [
-          "options.html"
+          "options.html",
+          "./assets/**/*"
         ],
         "matches": [
           "<all_urls>"
@@ -83,6 +98,25 @@
           "$CRX_ID"
         ]
       }
-    ]
+    ],
+    "commands": {
+      "_execute_action": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Y"
+        }
+      },
+      "save_to_clip": {
+        "description": "スタックに保存",
+        "suggested_key": {
+          "default": "Ctrl+Shift+S"
+        }
+      },
+      "save_to_inbox": {
+        "description": "受信箱に保存",
+        "suggested_key": {
+          "default": "Ctrl+I"
+        }
+      }
+    }
   }
 }

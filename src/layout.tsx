@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import { MantineProvider } from '@mantine/core';
 import type { FC, ReactNode } from 'react';
 
@@ -14,15 +13,12 @@ export const Layout: FC<{ children?: ReactNode }> = ({ children }) => (
     <MantineProvider
       withGlobalStyles
       withNormalizeCSS
-      theme={{ primaryColor: 'cyan' }}
+      theme={{
+        primaryColor: 'cyan',
+        fontFamily: `Noto Sans JP, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji`,
+      }}
     >
-      <div
-        css={css`
-          font-family: 'Noto Sans JP', sans-serif;
-        `}
-      >
-        {children}
-      </div>
+      <div>{children}</div>
     </MantineProvider>
   </>
 );
