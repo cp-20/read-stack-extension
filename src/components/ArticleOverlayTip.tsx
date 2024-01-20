@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { sendToBackground } from '@plasmohq/messaging';
 
+import { CheckIcon } from '@/components/CheckIcon';
 import { ProgressCircle } from '@/components/ProgressCircle';
 import { useConfettiEnabled } from '@/components/Settings/SettingsConfettiEnabled';
 import { useOverlayEnabled } from '@/components/Settings/SettingsOverlayEnabled';
@@ -144,9 +145,8 @@ export const ArticleOverlayTip = () => {
         onClick={toggleReadStatus}
         css={css`
           position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          display: grid;
+          place-items: center;
           width: 100%;
           height: 100%;
           padding: 0;
@@ -166,35 +166,13 @@ export const ArticleOverlayTip = () => {
           }
         `}
       >
-        <ProgressCircle progress={progress}>
-          <span
-            css={css`
-              position: relative;
-              top: -3px;
-              display: block;
-              width: 16px;
-              height: 8px;
-              border-bottom: 2px solid
-                ${currentClip?.status === 2 ? '#22b8cf' : 'gray'};
-              border-left: 2px solid
-                ${currentClip?.status === 2 ? '#22b8cf' : 'gray'};
-              transform: rotate(-45deg);
-              animation: ${currentClip?.status === 2
-                ? '0.2s check forwards cubic-bezier(0.075, 0.82, 0.165, 1)'
-                : 'none'};
-
-              @keyframes check {
-                0% {
-                  transform: scale(0) rotate(-45deg);
-                }
-
-                100% {
-                  transform: scale(1) rotate(-45deg);
-                }
-              }
-            `}
-          />
-        </ProgressCircle>
+        {isClip ? (
+          <ProgressCircle progress={currentClip.status == 2 ? 100 : progress}>
+            <CheckIcon active={currentClip.status == 2} />
+          </ProgressCircle>
+        ) : (
+          <CheckIcon active={false} />
+        )}
       </button>
     </div>
   );
