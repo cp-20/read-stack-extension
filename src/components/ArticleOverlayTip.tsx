@@ -47,7 +47,7 @@ export const ArticleOverlayTip = () => {
   const isOverlayShown = isOverlayEnabled && (match || isClip || isItem);
 
   // globにマッチしているが受信箱にもクリップにも保存されていないなら受信箱に保存する
-  if (match && isClip === null && isItem == null) {
+  if (match && currentClip === null && currentItem == null) {
     sendToBackground({
       name: 'post-inbox-item',
       body: { url: currentUrl },
