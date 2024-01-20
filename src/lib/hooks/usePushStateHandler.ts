@@ -13,5 +13,5 @@ export const usePushStateHandler = (
       window.removeEventListener('pushState', handlePushState);
       window.removeEventListener('popstate', handlePushState);
     };
-  }, [handlePushState]);
+  }, [executeFirst, handlePushState]);
 };
