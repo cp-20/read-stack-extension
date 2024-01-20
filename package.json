@@ -71,20 +71,19 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://read-stack.cp20.dev/api/*",
-      "https://qiita.com/*",
-      "https://zenn.dev/*",
-      "https://note.com/*"
+      "<all_urls>"
     ],
     "key": "$CRX_KEY",
     "permissions": [
       "activeTab",
-      "bookmarks"
+      "bookmarks",
+      "notifications"
     ],
     "web_accessible_resources": [
       {
         "resources": [
-          "options.html"
+          "options.html",
+          "./assets/**/*"
         ],
         "matches": [
           "<all_urls>"
@@ -93,6 +92,25 @@
           "$CRX_ID"
         ]
       }
-    ]
+    ],
+    "commands": {
+      "_execute_action": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Y"
+        }
+      },
+      "save_to_clip": {
+        "description": "スタックに保存",
+        "suggested_key": {
+          "default": "Ctrl+Shift+S"
+        }
+      },
+      "save_to_inbox": {
+        "description": "受信箱に保存",
+        "suggested_key": {
+          "default": "Ctrl+I"
+        }
+      }
+    }
   }
 }
