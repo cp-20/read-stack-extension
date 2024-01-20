@@ -11,5 +11,5 @@ const pushState = window.history.pushState.bind(window.history);
 
 window.history.pushState = (state, unused, url) => {
   pushState(state, unused, url);
-  window.dispatchEvent(new Event('pushstate'));
+  window.dispatchEvent(new Event('pushState'));
 };

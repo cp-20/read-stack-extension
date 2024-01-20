@@ -1,5 +1,5 @@
 const calcTargetScroll = (selector: string) => {
-  const articleBody = document.querySelector(selector);
+  const articleBody = document.querySelector(selector) ?? document.body;
   const { height, top } = articleBody.getBoundingClientRect();
   const scrollHeight = top + height + window.scrollY - window.innerHeight;
   return scrollHeight;
