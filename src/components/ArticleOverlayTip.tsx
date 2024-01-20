@@ -1,10 +1,9 @@
 import { css } from '@emotion/react';
 import confetti from 'canvas-confetti';
 import { isMatch } from 'picomatch';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { sendToBackground } from '@plasmohq/messaging';
-import { useStorage } from '@plasmohq/storage/hook';
 
 import { ProgressCircle } from '@/components/ProgressCircle';
 import { useConfettiEnabled } from '@/components/Settings/SettingsConfettiEnabled';
@@ -39,7 +38,7 @@ export const ArticleOverlayTip = () => {
   const { currentItem, setCurrentItem } = useCurrentInboxItem();
   const { currentUrl } = useCurrentUrl();
 
-  const [progress, setProgress] = useStorage<number>('progress', 0);
+  const [progress, setProgress] = useState(0);
 
   const match = isMatch(currentUrl, articleUrlGlobs);
   const isClip = !!currentClip;
