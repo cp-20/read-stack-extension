@@ -64,6 +64,11 @@
     "stylelint-config-standard": "^34.0.0",
     "typescript": "5.2.2"
   },
+  "pnpm": {
+    "overrides": {
+      "stylelint>postcss": "8.4.33"
+    }
+  },
   "manifest": {
     "host_permissions": [
       "https://read-stack.cp20.dev/api/*",
