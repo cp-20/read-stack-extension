@@ -19,7 +19,7 @@ export const postMyClip = fetcher
   .method('post')
   .create();
 export const patchMyClip = fetcher
-  .path('/users/me/clips/:clipId')
+  .path('/users/me/clips/{clipId}')
   .method('patch')
   .create();
 

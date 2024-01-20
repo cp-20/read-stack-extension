@@ -15,7 +15,7 @@ export interface paths {
     /** @description クリップを作成します */
     post: operations["postMyClip"];
   };
-  "/users/me/clips/:clipId": {
+  "/users/me/clips/{clipId}": {
     /** @description クリップを取得します */
     get: operations["getMyClip"];
     /** @description クリップを削除します */
@@ -43,21 +43,21 @@ export interface paths {
     /** @description 受信箱にアイテムを追加します */
     post: operations["postMyInboxItem"];
   };
-  "/users/me/inboxes/:itemId": {
+  "/users/me/inboxes/{itemId}": {
     /** @description 受信箱のアイテムを取得します */
     get: operations["getMyInboxItem"];
     /** @description 受信箱のアイテムを削除します */
     delete: operations["deleteMyInboxItem"];
   };
-  "/users/me/inboxes/:itemId/move-to-clip": {
+  "/users/me/inboxes/{itemId}/move-to-clip": {
     /** @description 受信箱のアイテムをスタックに移動します */
     post: operations["moveMyInboxItemToClip"];
   };
-  "/users/me/clips/:clipId/move-to-inbox": {
+  "/users/me/clips/{clipId}/move-to-inbox": {
     /** @description クリップを受信箱に移動します */
     post: operations["moveMyClipToInbox"];
   };
-  "/articles/:articleId": {
+  "/articles/{articleId}": {
     /** @description 記事のIDから記事を取得します */
     get: operations["getArticle"];
   };
