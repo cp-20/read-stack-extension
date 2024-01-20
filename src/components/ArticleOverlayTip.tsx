@@ -2,15 +2,21 @@ import { css } from '@emotion/react';
 import confetti from 'canvas-confetti';
 import { isMatch } from 'picomatch';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { sendToBackground } from '@plasmohq/messaging';
+import { useMessage } from '@plasmohq/messaging/hook';
 
 import { CheckIcon } from '@/components/CheckIcon';
 import { ProgressCircle } from '@/components/ProgressCircle';
 import { useConfettiEnabled } from '@/components/Settings/SettingsConfettiEnabled';
 import { useOverlayEnabled } from '@/components/Settings/SettingsOverlayEnabled';
 import { useArticleUrlGlobs } from '@/components/Settings/SettingsUrlGlobs';
-import type { InboxItemWithArticle } from '@/lib/api/client';
+import type {
+  Clip,
+  ClipWithArticle,
+  InboxItemWithArticle,
+} from '@/lib/api/client';
 import { useCurrentClip } from '@/lib/hooks/useCurrentClip';
 import { useCurrentInboxItem } from '@/lib/hooks/useCurrentInboxItem';
 import { useCurrentUrl } from '@/lib/hooks/useCurrentUrl';
@@ -86,6 +92,90 @@ export const ArticleOverlayTip = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [currentClip, setProgress]);
+
+  useMessage<{ url: string }, void>(async (req) => {
+    if (req.name === 'save-to-clip') {
+      const url = req.body?.url;
+      if (!url) return;
+      if (url !== currentUrl) return;
+
+      if (isClip) {
+        toast.info('記事は既にスタックに積まれています', {
+          position: 'top-right',
+        });
+        return;
+      }
+
+      if (isItem) {
+        const clip: Clip | null = await sendToBackground({
+          name: 'move-inbox-item-to-clip',
+          body: { url },
+        });
+        if (clip === null) {
+          toast.error('記事をスタックに積めませんでした', {
+            position: 'top-right',
+          });
+          return;
+        }
+
+        setCurrentClip({ ...clip, article: currentItem.article });
+        toast.success('記事をスタックに保存しました', {
+          position: 'top-right',
+        });
+        return;
+      }
+
+      const clip: ClipWithArticle | null = await sendToBackground({
+        name: 'post-clip',
+        body: { url },
+      });
+      if (clip === null) {
+        toast.error('記事をスタックに積めませんでした', {
+          position: 'top-right',
+        });
+        return;
+      }
+
+      setCurrentClip(clip);
+      toast.success('記事をスタックに保存しました', {
+        position: 'top-right',
+      });
+    } else if (req.name === 'save-to-inbox-item') {
+      const url = req.body?.url;
+      if (!url) return;
+      if (url !== currentUrl) return;
+
+      if (isClip) {
+        toast.info('記事は既にスタックに積まれています', {
+          position: 'top-right',
+        });
+        return;
+      }
+
+      if (isItem) {
+        toast.info('記事は既に受信箱に入っています', {
+          position: 'top-right',
+        });
+        return;
+      }
+
+      const item: InboxItemWithArticle | null = await sendToBackground({
+        name: 'post-inbox-item',
+        body: { url },
+      });
+      if (item === null) {
+        toast.error('記事を受信箱に入れられませんでした', {
+          position: 'top-right',
+        });
+        return;
+      }
+
+      setCurrentItem(item);
+      toast.success('記事を受信箱に入れました', {
+        position: 'top-right',
+      });
+    }
+  });
 
   const toggleReadStatus = async () => {
     if (!currentClip) {
