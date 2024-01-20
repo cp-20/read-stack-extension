@@ -20,7 +20,9 @@ const styleCache = createCache({
 });
 
 export const getStyle: PlasmoGetStyle = () => {
-  styleElement.textContent = styleText;
+  const style = document.createElement('style');
+  style.textContent = styleText.replace(':root', '.Toastify');
+  styleElement.append(style);
 
   return styleElement;
 };
