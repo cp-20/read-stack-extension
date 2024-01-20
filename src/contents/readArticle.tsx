@@ -1,6 +1,8 @@
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import styleText from 'data-text:react-toastify/dist/ReactToastify.css';
 import type { PlasmoCSConfig, PlasmoGetStyle } from 'plasmo';
+import { ToastContainer } from 'react-toastify';
 
 import { ArticleOverlayTip } from '@/components/ArticleOverlayTip';
 
@@ -17,11 +19,16 @@ const styleCache = createCache({
   container: styleElement,
 });
 
-export const getStyle: PlasmoGetStyle = () => styleElement;
+export const getStyle: PlasmoGetStyle = () => {
+  styleElement.textContent = styleText;
+
+  return styleElement;
+};
 
 const Content = () => {
   return (
     <CacheProvider value={styleCache}>
+      <ToastContainer />
       <ArticleOverlayTip />
     </CacheProvider>
   );
