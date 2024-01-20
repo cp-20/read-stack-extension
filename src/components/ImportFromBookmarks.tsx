@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { ActionIcon, Button, Checkbox, Flex, Modal, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconChevronRight } from '@tabler/icons-react';
 import { useCallback, useEffect, useState, type FC } from 'react';
 
@@ -11,19 +12,11 @@ import {
 } from '@/components/useCheckedBookmarks';
 
 export const ImportFromBookmarks: FC = () => {
-  const [open, setOpen] = useState(true);
+  const [open, handlers] = useDisclosure(true);
   const { checkedBookmarks } = useCheckedBookmarksAtom();
   const [bookmarks, setBookmarks] = useState<
     chrome.bookmarks.BookmarkTreeNode[]
   >([]);
-
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpen(false);
-  };
 
   const handleImport = () => {
     sendToBackground({
@@ -32,7 +25,7 @@ export const ImportFromBookmarks: FC = () => {
         .filter((node) => checkedBookmarks.includes(node.id))
         .map((node) => node.url),
     }).then(() => {
-      setOpen(false);
+      handlers.close();
     });
   };
 
@@ -46,12 +39,12 @@ export const ImportFromBookmarks: FC = () => {
 
   return (
     <>
-      <Button variant="subtle" onClick={handleOpenModal}>
+      <Button variant="subtle" onClick={handlers.open}>
         ブックマークからインポートする
       </Button>
       <Modal
         opened={open}
-        onClose={handleCloseModal}
+        onClose={handlers.close}
         title="ブックマークからインポート"
         size="xl"
       >
@@ -67,10 +60,10 @@ export const ImportFromBookmarks: FC = () => {
           </div>
 
           <Flex justify="end" gap={8}>
-            <Button variant="outline" onClick={handleCloseModal}>
+            <Button variant="outline" onClick={handlers.close}>
               キャンセル
             </Button>
-            <Button>インポート</Button>
+            <Button onClick={handleImport}>インポート</Button>
           </Flex>
         </div>
       </Modal>
