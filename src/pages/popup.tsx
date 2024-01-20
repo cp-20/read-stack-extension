@@ -8,16 +8,13 @@ import {
 } from '@tabler/icons-react';
 import { useCallback, useEffect, useState, type FC } from 'react';
 
-import { sendToBackground } from '@plasmohq/messaging';
-
-import type { Clip, ClipWithArticle } from '@/lib/api/client';
+import type { ClipWithArticle } from '@/lib/api/client';
 import { usePostClip } from '@/lib/hooks/usePostClip';
-import { useUpdateClip } from '@/lib/hooks/useUpdateClip';
+import { deleteClip, updateClip } from '@/lib/messenger';
 
 export const Popup: FC = () => {
   const theme = useMantineTheme();
   const { postClip } = usePostClip();
-  const { updateClip } = useUpdateClip();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -48,25 +45,27 @@ export const Popup: FC = () => {
 
       const newStatus = status === 'read' ? 2 : 0;
       setActionLoading('status');
-      await updateClip(clip.id, { status: newStatus });
+      const updatedClip = await updateClip(clip.id, { status: newStatus });
+      if (updatedClip === null) {
+        setActionLoading('none');
+        return;
+      }
+
       setClip((prev) => {
         if (prev === null) return null;
         return { ...prev, status: newStatus };
       });
       setActionLoading('none');
     },
-    [actionLoading, clip, updateClip],
+    [actionLoading, clip],
   );
 
-  const deleteClip = useCallback(async () => {
+  const deleteClipHandler = useCallback(async () => {
     if (clip === null) return;
     if (actionLoading !== 'none') return;
 
     setActionLoading('delete');
-    const deletedClip: Clip | null = await sendToBackground({
-      name: 'delete-clip',
-      body: { clipId: clip.id },
-    });
+    const deletedClip = await deleteClip(clip.id);
     if (deletedClip === null) return;
 
     setClip(null);
@@ -164,7 +163,7 @@ export const Popup: FC = () => {
                   color="red"
                   rightIcon={<IconTrash />}
                   fullWidth
-                  onClick={deleteClip}
+                  onClick={deleteClipHandler}
                   loading={actionLoading === 'delete'}
                 >
                   削除する

@@ -4,7 +4,6 @@ import { isMatch } from 'picomatch';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { sendToBackground } from '@plasmohq/messaging';
 import { useMessage } from '@plasmohq/messaging/hook';
 
 import { CheckIcon } from '@/components/CheckIcon';
@@ -12,14 +11,15 @@ import { ProgressCircle } from '@/components/ProgressCircle';
 import { useConfettiEnabled } from '@/components/Settings/SettingsConfettiEnabled';
 import { useOverlayEnabled } from '@/components/Settings/SettingsOverlayEnabled';
 import { useArticleUrlGlobs } from '@/components/Settings/SettingsUrlGlobs';
-import type {
-  Clip,
-  ClipWithArticle,
-  InboxItemWithArticle,
-} from '@/lib/api/client';
 import { useCurrentClip } from '@/lib/hooks/useCurrentClip';
 import { useCurrentInboxItem } from '@/lib/hooks/useCurrentInboxItem';
 import { useCurrentUrl } from '@/lib/hooks/useCurrentUrl';
+import {
+  moveInboxItemToClip,
+  postClip,
+  postInboxItem,
+  updateClip,
+} from '@/lib/messenger';
 import { getSelector } from '@/lib/trackProgress/getSelector';
 import { scroll2progress } from '@/lib/trackProgress/progressScrollConverter';
 
@@ -54,13 +54,10 @@ export const ArticleOverlayTip = () => {
 
   // globにマッチしているが受信箱にもクリップにも保存されていないなら受信箱に保存する
   if (match && currentClip === null && currentItem == null) {
-    sendToBackground({
-      name: 'post-inbox-item',
-      body: { url: currentUrl },
-    }).then((result: InboxItemWithArticle | null) => {
-      if (result === null) return;
+    postInboxItem(currentUrl).then((item) => {
+      if (item === null) return;
 
-      setCurrentItem(result);
+      setCurrentItem(item);
     });
   }
 
@@ -76,13 +73,7 @@ export const ArticleOverlayTip = () => {
         const progress = Math.round(scroll2progress(selector)(window.scrollY));
 
         setProgress(progress);
-        sendToBackground({
-          name: 'update-clip',
-          body: {
-            clipId: currentClip.id,
-            patch: { progress },
-          },
-        });
+        updateClip(currentClip.id, { progress });
       }, 100);
     };
 
@@ -107,10 +98,7 @@ export const ArticleOverlayTip = () => {
       }
 
       if (isItem) {
-        const clip: Clip | null = await sendToBackground({
-          name: 'move-inbox-item-to-clip',
-          body: { url },
-        });
+        const clip = await moveInboxItemToClip(currentItem.id);
         if (clip === null) {
           toast.error('記事をスタックに積めませんでした', {
             position: 'top-right',
@@ -125,10 +113,7 @@ export const ArticleOverlayTip = () => {
         return;
       }
 
-      const clip: ClipWithArticle | null = await sendToBackground({
-        name: 'post-clip',
-        body: { url },
-      });
+      const clip = await postClip(url);
       if (clip === null) {
         toast.error('記事をスタックに積めませんでした', {
           position: 'top-right',
@@ -159,10 +144,7 @@ export const ArticleOverlayTip = () => {
         return;
       }
 
-      const item: InboxItemWithArticle | null = await sendToBackground({
-        name: 'post-inbox-item',
-        body: { url },
-      });
+      const item = await postInboxItem(url);
       if (item === null) {
         toast.error('記事を受信箱に入れられませんでした', {
           position: 'top-right',
@@ -181,24 +163,14 @@ export const ArticleOverlayTip = () => {
     if (!currentClip) {
       if (!currentItem) return;
 
-      const clip = await sendToBackground({
-        name: 'move-inbox-item-to-clip',
-        body: { itemId: currentItem.id },
-      });
-      if (!clip) return;
+      const clip = await moveInboxItemToClip(currentItem.id);
+      if (clip === null) return;
 
       setCurrentClip({ ...clip, article: currentItem.article });
       setCurrentItem(null);
 
-      const updatedClip = await sendToBackground({
-        name: 'update-clip',
-        body: {
-          clipId: clip.id,
-          patch: { status: 2 },
-        },
-      });
-
-      if (!updatedClip) return;
+      const updatedClip = await updateClip(clip.id, { status: 2 });
+      if (updatedClip === null) return;
 
       setCurrentClip({ ...clip, article: currentItem.article, ...updatedClip });
       if (isConfettiEnabled) showConfetti();
@@ -206,14 +178,9 @@ export const ArticleOverlayTip = () => {
       return;
     }
 
-    const updatedClip = await sendToBackground({
-      name: 'update-clip',
-      body: {
-        clipId: currentClip.id,
-        patch: { status: currentClip.status === 2 ? 0 : 2 },
-      },
-    });
-    if (!updatedClip) return;
+    const newStatus = currentClip.status === 2 ? 0 : 2;
+    const updatedClip = await updateClip(currentClip.id, { status: newStatus });
+    if (updatedClip === null) return;
 
     setCurrentClip({ ...currentClip, ...updatedClip });
     if (isConfettiEnabled && updatedClip.status === 2) showConfetti();

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { sendToBackground } from '@plasmohq/messaging';
-
-import { type ClipWithArticle } from '@/lib/api/client';
+import type { ClipWithArticle } from '@/lib/api/client';
 import { useCurrentUrl } from '@/lib/hooks/useCurrentUrl';
+import { getClipByUrl } from '@/lib/messenger';
 import { getSelector } from '@/lib/trackProgress/getSelector';
 import { progress2scroll } from '@/lib/trackProgress/progressScrollConverter';
 
@@ -16,10 +15,7 @@ export const useCurrentClip = () => {
   useEffect(() => {
     if (currentClip?.article.url === currentUrl) return;
 
-    sendToBackground({
-      name: 'get-clip-by-url',
-      body: { url: currentUrl },
-    }).then((clip: ClipWithArticle | null) => {
+    getClipByUrl(currentUrl).then((clip) => {
       setCurrentClip(clip);
 
       // 読み途中だった場合

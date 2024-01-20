@@ -14,17 +14,19 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconChevronRight, IconDatabaseImport } from '@tabler/icons-react';
 import { useCallback, useEffect, useState, type FC } from 'react';
 
-import { sendToBackground } from '@plasmohq/messaging';
-
 import {
   useCheckedBookmarks,
   useCheckedBookmarksAtom,
 } from '@/components/useCheckedBookmarks';
-import type {
-  Clip,
-  ClipWithArticle,
-  InboxItemWithArticle,
-} from '@/lib/api/client';
+import type { ClipWithArticle, InboxItemWithArticle } from '@/lib/api/client';
+import {
+  getBookmarks,
+  getClipByUrl,
+  getInboxItemByUrl,
+  moveInboxItemToClip,
+  postClip,
+  postInboxItem,
+} from '@/lib/messenger';
 import { processConcurrently } from '@/lib/utils/processConcurrently';
 
 type SaveToClipResult =
@@ -41,32 +43,14 @@ type SaveToClipResult =
     };
 
 const saveToClip = async (url: string): Promise<SaveToClipResult> => {
-  const clip: ClipWithArticle | null = await sendToBackground({
-    name: 'get-clip-by-url',
-    body: { url },
-  });
+  const clip = await getClipByUrl(url);
+  if (clip !== null) return { status: 'canceled' };
 
-  if (clip !== null) {
-    return {
-      status: 'canceled',
-    };
-  }
-
-  const item: InboxItemWithArticle | null = await sendToBackground({
-    name: 'get-inbox-item-by-url',
-    body: { url },
-  });
+  const item = await getInboxItemByUrl(url);
 
   if (item !== null) {
-    const clip: Clip | null = await sendToBackground({
-      name: 'move-inbox-item-to-clip',
-      body: { itemId: item.id },
-    });
-    if (clip === null) {
-      return {
-        status: 'failure',
-      };
-    }
+    const clip = await moveInboxItemToClip(item.id);
+    if (clip === null) return { status: 'failure' };
 
     const newClip = { ...clip, article: item.article };
     return {
@@ -76,15 +60,8 @@ const saveToClip = async (url: string): Promise<SaveToClipResult> => {
     };
   }
 
-  const newClip: ClipWithArticle | null = await sendToBackground({
-    name: 'post-clip',
-    body: { url },
-  });
-  if (newClip === null) {
-    return {
-      status: 'failure',
-    };
-  }
+  const newClip = await postClip(url);
+  if (newClip === null) return { status: 'failure' };
 
   return {
     status: 'success',
@@ -107,37 +84,14 @@ type SaveToInboxItemResult =
     };
 
 const saveToInboxItem = async (url: string): Promise<SaveToInboxItemResult> => {
-  const item: InboxItemWithArticle | null = await sendToBackground({
-    name: 'get-inbox-item-by-url',
-    body: { url },
-  });
+  const item = await getInboxItemByUrl(url);
+  if (item !== null) return { status: 'canceled' };
 
-  if (item !== null) {
-    return {
-      status: 'canceled',
-    };
-  }
+  const clip = await getClipByUrl(url);
+  if (clip !== null) return { status: 'canceled' };
 
-  const clip: ClipWithArticle | null = await sendToBackground({
-    name: 'get-clip-by-url',
-    body: { url },
-  });
-
-  if (clip !== null) {
-    return {
-      status: 'canceled',
-    };
-  }
-
-  const newItem: InboxItemWithArticle | null = await sendToBackground({
-    name: 'post-inbox-item',
-    body: { url },
-  });
-  if (newItem === null) {
-    return {
-      status: 'failure',
-    };
-  }
+  const newItem = await postInboxItem(url);
+  if (newItem === null) return { status: 'failure' };
 
   return {
     status: 'success',
@@ -233,11 +187,7 @@ export const ImportFromBookmarks: FC = () => {
   }, [processingHandlers, handlers]);
 
   useEffect(() => {
-    sendToBackground({
-      name: 'get-bookmarks',
-    }).then((bookmarks: chrome.bookmarks.BookmarkTreeNode[]) => {
-      setBookmarks(bookmarks);
-    });
+    getBookmarks().then((bookmarks) => setBookmarks(bookmarks));
   }, []);
 
   return (

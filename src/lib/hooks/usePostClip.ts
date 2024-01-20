@@ -1,21 +1,18 @@
 import { useCallback } from 'react';
 
-import { sendToBackground } from '@plasmohq/messaging';
-
-import type { ClipWithArticle } from '@/lib/api/client';
+import { postClip } from '@/lib/messenger';
 
 export const usePostClip = () => {
-  const postClip = useCallback(async () => {
+  const postClipHandler = useCallback(async () => {
     try {
       const activeTabs = await chrome.tabs.query({
         active: true,
         currentWindow: true,
       });
       const url = activeTabs[0].url;
-      const clip: ClipWithArticle | null = await sendToBackground({
-        name: 'post-clip',
-        body: { url },
-      });
+      if (url === undefined) return null;
+
+      const clip = await postClip(url);
 
       return clip;
     } catch (error) {
@@ -23,5 +20,5 @@ export const usePostClip = () => {
     }
   }, []);
 
-  return { postClip };
+  return { postClip: postClipHandler };
 };

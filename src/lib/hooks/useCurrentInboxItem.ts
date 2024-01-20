@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { sendToBackground } from '@plasmohq/messaging';
-
-import { type InboxItemWithArticle } from '@/lib/api/client';
+import type { InboxItemWithArticle } from '@/lib/api/client';
 import { useCurrentUrl } from '@/lib/hooks/useCurrentUrl';
+import { getInboxItemByUrl } from '@/lib/messenger';
 
 export const useCurrentInboxItem = () => {
   const { currentUrl } = useCurrentUrl();
@@ -14,10 +13,7 @@ export const useCurrentInboxItem = () => {
   useEffect(() => {
     if (currentItem?.article.url === currentUrl) return;
 
-    sendToBackground({
-      name: 'get-inbox-item-by-url',
-      body: { url: currentUrl },
-    }).then((clip: InboxItemWithArticle | null) => {
+    getInboxItemByUrl(currentUrl).then((clip) => {
       setCurrentItem(clip);
     });
   }, [currentUrl, currentItem, setCurrentItem]);
