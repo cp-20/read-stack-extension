@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import brandIcon from 'data-base64:assets/icon.svg';
 
 export const Banner = () => (
   <div
@@ -11,7 +10,7 @@ export const Banner = () => (
     `}
   >
     <div>
-      <img src={brandIcon} alt="" width={96} height={96} />
+      <img src="/assets/icon.svg" alt="" width={96} height={96} />
     </div>
     <div>
       <h1
