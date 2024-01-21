@@ -172,10 +172,10 @@ export const ImportFromBookmarks: FC = () => {
     };
     if (target === 'clip') {
       const promises = urls.map((url) => () => saveToClip(url));
-      await processConcurrently(promises, 5, doneCallback);
+      await processConcurrently(promises, 10, doneCallback);
     } else {
       const promises = urls.map((url) => () => saveToInboxItem(url));
-      await processConcurrently(promises, 5, doneCallback);
+      await processConcurrently(promises, 10, doneCallback);
     }
 
     setLoading(false);
