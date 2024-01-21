@@ -1,9 +1,10 @@
 import { css } from '@emotion/react';
-import { Space } from '@mantine/core';
+import { Stack } from '@mantine/core';
 import type { FC } from 'react';
 
 import { Banner } from '@/components/Banner';
 import { ImportFromBookmarks } from '@/components/Importer/ImportFromBookmarks';
+import { ImportFromText } from '@/components/Importer/ImportFromText';
 import { Settings } from '@/components/Settings';
 import { Layout } from '@/layout';
 
@@ -19,11 +20,14 @@ export const Options: FC = () => {
           min-height: 100vh;
         `}
       >
-        <Banner />
-        <Space h="xl" />
-        <Settings />
-        <Space h="xl" />
-        <ImportFromBookmarks />
+        <Stack spacing="xl">
+          <Banner />
+          <Settings />
+          <Stack spacing="md">
+            <ImportFromBookmarks />
+            <ImportFromText />
+          </Stack>
+        </Stack>
       </div>
     </Layout>
   );
