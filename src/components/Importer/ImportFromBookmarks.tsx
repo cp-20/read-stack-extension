@@ -5,19 +5,10 @@ import { IconDatabaseImport } from '@tabler/icons-react';
 import { useCallback, useEffect, useState, type FC } from 'react';
 
 import { BookMarkTreeNodeList } from '@/components/Importer/BookMarkTreeNodeList';
-import {
-  saveToClip,
-  saveToInboxItem,
-  type SaveToClipResult,
-  type SaveToInboxItemResult,
-} from '@/lib/importer/saveTo';
+import { useImporter } from '@/components/Importer/useImporter';
 import { getBookmarks } from '@/lib/messenger';
-import { processConcurrently } from '@/lib/utils/processConcurrently';
 
-import {
-  ProcessingImportModal,
-  type ProcessingResult,
-} from './ProcessingImportModal';
+import { ProcessingImportModal } from './ProcessingImportModal';
 import { useCheckedBookmarksAtom } from './useCheckedBookmarks';
 
 const flatBookmarks = (
@@ -37,14 +28,7 @@ export const ImportFromBookmarks: FC = () => {
   const [target, setTarget] = useState<'clip' | 'inbox'>('clip');
   const [loading, setLoading] = useState(false);
   const [processingOpen, processingHandlers] = useDisclosure(false);
-  const [processingResult, setProcessingResult] = useState<ProcessingResult>({
-    lastResult: null,
-    totalCount: 0,
-    resultCount: 0,
-    successCount: 0,
-    failureCount: 0,
-    canceledCount: 0,
-  });
+  const { importer, result: processingResult } = useImporter();
 
   const handleImport = useCallback(async () => {
     setLoading(true);
@@ -54,43 +38,11 @@ export const ImportFromBookmarks: FC = () => {
       .filter(Boolean) as string[];
 
     processingHandlers.open();
-    setProcessingResult({
-      lastResult: null,
-      totalCount: urls.length,
-      resultCount: 0,
-      successCount: 0,
-      failureCount: 0,
-      canceledCount: 0,
-    });
-    const doneCallback = (result: SaveToClipResult | SaveToInboxItemResult) => {
-      setProcessingResult((prev) => ({
-        ...prev,
-        lastResult: result,
-        resultCount: prev.resultCount + 1,
-        successCount:
-          result.status === 'success'
-            ? prev.successCount + 1
-            : prev.successCount,
-        failureCount:
-          result.status === 'failure'
-            ? prev.failureCount + 1
-            : prev.failureCount,
-        canceledCount:
-          result.status === 'canceled'
-            ? prev.canceledCount + 1
-            : prev.canceledCount,
-      }));
-    };
-    if (target === 'clip') {
-      const promises = urls.map((url) => () => saveToClip(url));
-      await processConcurrently(promises, 10, doneCallback);
-    } else {
-      const promises = urls.map((url) => () => saveToInboxItem(url));
-      await processConcurrently(promises, 10, doneCallback);
-    }
+
+    await importer(target, urls);
 
     setLoading(false);
-  }, [bookmarks, checkedBookmarks, processingHandlers, target]);
+  }, [bookmarks, checkedBookmarks, importer, processingHandlers, target]);
 
   const closeProcessingModal = useCallback(() => {
     processingHandlers.close();
