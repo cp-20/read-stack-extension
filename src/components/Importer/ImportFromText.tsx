@@ -54,6 +54,7 @@ export const ImportFromText: FC = () => {
             onChange={(e) => setUrlText(e.target.value)}
             minRows={10}
             autosize
+            maxRows={20}
             placeholder="URLを改行区切りで入力してください"
           />
 
