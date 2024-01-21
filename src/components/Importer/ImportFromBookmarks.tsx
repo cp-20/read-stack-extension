@@ -60,7 +60,7 @@ export const ImportFromBookmarks: FC = () => {
         onClick={handlers.open}
         rightIcon={<IconDatabaseImport />}
       >
-        ブックマークからインポートする
+        ブックマークからインポート
       </Button>
       <Modal
         opened={open}
