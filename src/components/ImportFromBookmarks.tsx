@@ -18,87 +18,14 @@ import {
   useCheckedBookmarks,
   useCheckedBookmarksAtom,
 } from '@/components/useCheckedBookmarks';
-import type { ClipWithArticle, InboxItemWithArticle } from '@/lib/api/client';
 import {
-  getBookmarks,
-  getClipByUrl,
-  getInboxItemByUrl,
-  moveInboxItemToClip,
-  postClip,
-  postInboxItem,
-} from '@/lib/messenger';
+  saveToClip,
+  saveToInboxItem,
+  type SaveToClipResult,
+  type SaveToInboxItemResult,
+} from '@/lib/importer/saveTo';
+import { getBookmarks } from '@/lib/messenger';
 import { processConcurrently } from '@/lib/utils/processConcurrently';
-
-type SaveToClipResult =
-  | {
-      status: 'success';
-      type: 'clip';
-      clip: ClipWithArticle;
-    }
-  | {
-      status: 'failure';
-    }
-  | {
-      status: 'canceled';
-    };
-
-const saveToClip = async (url: string): Promise<SaveToClipResult> => {
-  const clip = await getClipByUrl(url);
-  if (clip !== null) return { status: 'canceled' };
-
-  const item = await getInboxItemByUrl(url);
-
-  if (item !== null) {
-    const clip = await moveInboxItemToClip(item.id);
-    if (clip === null) return { status: 'failure' };
-
-    const newClip = { ...clip, article: item.article };
-    return {
-      status: 'success',
-      type: 'clip',
-      clip: newClip,
-    };
-  }
-
-  const newClip = await postClip(url);
-  if (newClip === null) return { status: 'failure' };
-
-  return {
-    status: 'success',
-    type: 'clip',
-    clip: newClip,
-  };
-};
-
-type SaveToInboxItemResult =
-  | {
-      status: 'success';
-      type: 'inbox-item';
-      item: InboxItemWithArticle;
-    }
-  | {
-      status: 'failure';
-    }
-  | {
-      status: 'canceled';
-    };
-
-const saveToInboxItem = async (url: string): Promise<SaveToInboxItemResult> => {
-  const item = await getInboxItemByUrl(url);
-  if (item !== null) return { status: 'canceled' };
-
-  const clip = await getClipByUrl(url);
-  if (clip !== null) return { status: 'canceled' };
-
-  const newItem = await postInboxItem(url);
-  if (newItem === null) return { status: 'failure' };
-
-  return {
-    status: 'success',
-    type: 'inbox-item',
-    item: newItem,
-  };
-};
 
 type ProcessingResult = {
   lastResult: SaveToClipResult | SaveToInboxItemResult | null;
