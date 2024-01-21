@@ -5,7 +5,6 @@ import {
   Checkbox,
   Flex,
   Modal,
-  Progress,
   Select,
   Space,
   Text,
@@ -14,6 +13,10 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconChevronRight, IconDatabaseImport } from '@tabler/icons-react';
 import { useCallback, useEffect, useState, type FC } from 'react';
 
+import {
+  ProcessingImportModal,
+  type ProcessingResult,
+} from '@/components/ProcessingImportModal';
 import {
   useCheckedBookmarks,
   useCheckedBookmarksAtom,
@@ -26,15 +29,6 @@ import {
 } from '@/lib/importer/saveTo';
 import { getBookmarks } from '@/lib/messenger';
 import { processConcurrently } from '@/lib/utils/processConcurrently';
-
-type ProcessingResult = {
-  lastResult: SaveToClipResult | SaveToInboxItemResult | null;
-  resultCount: number;
-  successCount: number;
-  failureCount: number;
-  canceledCount: number;
-  totalCount: number;
-};
 
 const flatBookmarks = (
   bookmarks: chrome.bookmarks.BookmarkTreeNode[],
@@ -170,63 +164,11 @@ export const ImportFromBookmarks: FC = () => {
           </Flex>
         </div>
       </Modal>
-      <Modal
-        centered
+      <ProcessingImportModal
+        result={processingResult}
         opened={processingOpen}
-        onClose={() => void 0}
-        withCloseButton={false}
-      >
-        <div>
-          <Text fz="lg">インポート中...</Text>
-          <Space h="md" />
-          <div>
-            <Progress
-              value={
-                (processingResult.resultCount / processingResult.totalCount) *
-                100
-              }
-            />
-            <Text
-              fz="sm"
-              css={css`
-                display: flex;
-                justify-content: space-between;
-              `}
-              mt="xs"
-            >
-              <span>
-                {processingResult.resultCount} / {processingResult.totalCount}
-              </span>
-              <span>
-                成功: {processingResult.successCount} / 失敗:{' '}
-                {processingResult.failureCount} / キャンセル:{' '}
-                {processingResult.canceledCount}
-              </span>
-            </Text>
-            {processingResult.lastResult !== null &&
-              processingResult.lastResult.status === 'success' &&
-              processingResult.resultCount < processingResult.totalCount && (
-                <Text fz="sm" mt="xs">
-                  「
-                  {processingResult.lastResult.type === 'clip'
-                    ? processingResult.lastResult.clip.article.title
-                    : processingResult.lastResult.item.article.title}
-                  」 を処理しました
-                </Text>
-              )}
-            {processingResult.resultCount === processingResult.totalCount && (
-              <Text fz="sm" mt="xs">
-                インポートが完了しました
-              </Text>
-            )}
-          </div>
-          {processingResult.resultCount === processingResult.totalCount && (
-            <Flex justify="end" mt="md">
-              <Button onClick={closeProcessingModal}>閉じる</Button>
-            </Flex>
-          )}
-        </div>
-      </Modal>
+        onClose={closeProcessingModal}
+      />
     </>
   );
 };
