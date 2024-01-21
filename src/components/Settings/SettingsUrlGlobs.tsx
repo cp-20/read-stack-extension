@@ -27,6 +27,7 @@ export const SettingsUrlGlobs = () => {
         description="このいずれかにマッチするURLのページを自動的に受信箱に保存します。"
         autosize
         minRows={3}
+        maxRows={20}
         value={articleUrlGlobs.join('\n')}
         onChange={(e) => {
           setArticleUrlGlobs(e.target.value.split('\n'));
