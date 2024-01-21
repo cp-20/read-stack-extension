@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { Button, Flex, Modal, Select, Stack, Textarea } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconFileImport } from '@tabler/icons-react';
@@ -56,17 +57,21 @@ export const ImportFromText: FC = () => {
             placeholder="URLを改行区切りで入力してください"
           />
 
-          <Select
-            label="インポート先"
-            data={[
-              { value: 'inbox', label: '受信箱' },
-              { value: 'clip', label: 'スタック' },
-            ]}
-            value={target}
-            onChange={(value) => setTarget(value !== 'clip' ? 'inbox' : 'clip')}
-          />
-
-          <Flex justify="end" gap={8}>
+          <Flex align="end" gap={8}>
+            <Select
+              css={css`
+                flex: 1;
+              `}
+              label="インポート先"
+              data={[
+                { value: 'inbox', label: '受信箱' },
+                { value: 'clip', label: 'スタック' },
+              ]}
+              value={target}
+              onChange={(value) =>
+                setTarget(value !== 'clip' ? 'inbox' : 'clip')
+              }
+            />
             <Button variant="outline" onClick={handlers.close}>
               キャンセル
             </Button>

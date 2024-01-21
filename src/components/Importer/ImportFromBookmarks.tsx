@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Button, Flex, Modal, Select, Space } from '@mantine/core';
+import { Button, Flex, Modal, Select } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDatabaseImport } from '@tabler/icons-react';
 import { useCallback, useEffect, useState, type FC } from 'react';
@@ -80,19 +80,21 @@ export const ImportFromBookmarks: FC = () => {
             )}
           </div>
 
-          <Select
-            label="インポート先"
-            data={[
-              { value: 'inbox', label: '受信箱' },
-              { value: 'clip', label: 'スタック' },
-            ]}
-            value={target}
-            onChange={(value) => setTarget(value !== 'clip' ? 'inbox' : 'clip')}
-          />
-
-          <Space h="md" />
-
-          <Flex justify="end" gap={8}>
+          <Flex align="end" gap={8}>
+            <Select
+              css={css`
+                flex: 1;
+              `}
+              label="インポート先"
+              data={[
+                { value: 'inbox', label: '受信箱' },
+                { value: 'clip', label: 'スタック' },
+              ]}
+              value={target}
+              onChange={(value) =>
+                setTarget(value !== 'clip' ? 'inbox' : 'clip')
+              }
+            />
             <Button variant="outline" onClick={handlers.close}>
               キャンセル
             </Button>
