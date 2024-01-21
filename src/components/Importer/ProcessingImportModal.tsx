@@ -60,7 +60,7 @@ export const ProcessingImportModal: FC<ProcessingImportModalProps> = ({
           {result.lastResult !== null &&
             result.lastResult.status === 'success' &&
             result.resultCount < result.totalCount && (
-              <Text fz="sm" mt="xs">
+              <Text fz="sm" mt="xs" h="3rem" lineClamp={2}>
                 「
                 {result.lastResult.type === 'clip'
                   ? result.lastResult.clip.article.title
