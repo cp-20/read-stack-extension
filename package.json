@@ -82,8 +82,7 @@
     "key": "$CRX_KEY",
     "permissions": [
       "activeTab",
-      "bookmarks",
-      "notifications"
+      "bookmarks"
     ],
     "web_accessible_resources": [
       {
