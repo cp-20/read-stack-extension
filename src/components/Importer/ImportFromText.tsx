@@ -46,7 +46,7 @@ export const ImportFromText: FC = () => {
         centered
         onClose={handlers.close}
         title="テキストからインポート"
-        size="xl"
+        size="lg"
       >
         <Stack spacing="md">
           <Textarea
