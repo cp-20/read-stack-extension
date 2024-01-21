@@ -14,14 +14,6 @@ import { IconChevronRight, IconDatabaseImport } from '@tabler/icons-react';
 import { useCallback, useEffect, useState, type FC } from 'react';
 
 import {
-  ProcessingImportModal,
-  type ProcessingResult,
-} from '@/components/ProcessingImportModal';
-import {
-  useCheckedBookmarks,
-  useCheckedBookmarksAtom,
-} from '@/components/useCheckedBookmarks';
-import {
   saveToClip,
   saveToInboxItem,
   type SaveToClipResult,
@@ -29,6 +21,15 @@ import {
 } from '@/lib/importer/saveTo';
 import { getBookmarks } from '@/lib/messenger';
 import { processConcurrently } from '@/lib/utils/processConcurrently';
+
+import {
+  ProcessingImportModal,
+  type ProcessingResult,
+} from './ProcessingImportModal';
+import {
+  useCheckedBookmarks,
+  useCheckedBookmarksAtom,
+} from './useCheckedBookmarks';
 
 const flatBookmarks = (
   bookmarks: chrome.bookmarks.BookmarkTreeNode[],

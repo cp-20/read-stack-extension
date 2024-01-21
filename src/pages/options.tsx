@@ -3,7 +3,7 @@ import { Space } from '@mantine/core';
 import type { FC } from 'react';
 
 import { Banner } from '@/components/Banner';
-import { ImportFromBookmarks } from '@/components/ImportFromBookmarks';
+import { ImportFromBookmarks } from '@/components/Importer/ImportFromBookmarks';
 import { Settings } from '@/components/Settings';
 import { Layout } from '@/layout';
 
