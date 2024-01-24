@@ -29,6 +29,12 @@ jobs:
           cache: 'pnpm'
       - name: Build and package extension for all browsers
         run: pnpm compose:all
+        env:
+          CRX_ID: ${{ vars.CRX_ID }}
+          CRX_KEY: ${{ secrets.CRX_KEY }}
+          PLASMO_PUBLIC_CRX_ID: ${{ vars.PLASMO_PUBLIC_CRX_ID }}
+          PLASMO_PUBLIC_API_BASE_URL: ${{ vars.PLASMO_PUBLIC_API_BASE_URL }}
+          PLASMO_PUBLIC_APP_URL: ${{ vars.PLASMO_PUBLIC_APP_URL }}
 
       - name: Change owner of build directory
         run: |
